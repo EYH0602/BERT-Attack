@@ -58,3 +58,28 @@ cat cmd.txt | python batchrun.py --gpus 0,1,2,3
 
 to simutaneously generate adversarial samples of the given dataset for faster generation.
 We use the IMDB dataset as an example. 
+
+## ContentFuzz integration
+
+We added a helper script to run BERT-Attack directly on the ContentFuzz stance datasets (C-STANCE-A/B, SemEval16, VAST) and summarize results.
+
+Example commands (from repo root):
+
+```
+# C-STANCE-A (Chinese BERT classifier + MLM)
+uv run src/run_bert_attack.py c-stance-a --tgt-model saved_models/hfl/chinese-bert-wwm --mlm-model hfl/chinese-bert-wwm
+
+# SemEval16 (English BERT classifier + MLM)
+uv run src/run_bert_attack.py sem16 --tgt-model saved_models/google-bert/bert-base-uncased/sem16 --mlm-model google-bert/bert-base-uncased
+```
+
+Key flags:
+- `--tgt-model`: fine-tuned classifier checkpoint to attack.
+- `--mlm-model`: MLM used for substitutions (defaults to the dataset’s default if omitted).
+- `--sample-n`: randomly attack a subset.
+- `--start/--end`: slice the dataset.
+- `--use-sim-mat --embed-path --sim-mat-path`: enable cosine-sim filtering with counter-fitted vectors.
+
+Outputs:
+- Raw attack logs: `results/bert_attack/bert-attack+{model}+{dataset}.json`
+- Metrics summary: `results/bert_attack/bert-attack+{model}+{dataset}.summary.json`
