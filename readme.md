@@ -67,13 +67,13 @@ Example commands (from repo root):
 
 ```sh
 # C-STANCE-A (Chinese BERT classifier + MLM)
-uv run BERT-Attck/run_bert_attack.py c-stance-a --tgt-model saved_models/hfl/chinese-bert-wwm --mlm-model hfl/chinese-bert-wwm
+uv run BERT-Attck/run_bert_attack.py c-stance-a 
 
 # SemEval16 (English BERT classifier + MLM)
-uv run BERT-Attack/run_bert_attack.py sem16 --tgt-model saved_models/google-bert/bert-base-uncased/sem16 --mlm-model google-bert/bert-base-uncased
+uv run BERT-Attack/run_bert_attack.py sem16
 
 # VAST (English BERT classifier + MLM)
-uv run BERT-Attack/run_bert_attack.py vast --tgt-model saved_models/google-bert/bert-base-uncased/vast --mlm-model google-bert/bert-base-uncased
+uv run BERT-Attack/run_bert_attack.py vast
 ```
 
 Key flags:
