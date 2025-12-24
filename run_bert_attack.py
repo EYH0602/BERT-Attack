@@ -216,7 +216,7 @@ def main(
 
     if output_path is None:
         safe_model = Path(tgt_model).as_posix().replace("/", "--")
-        output_dir = Path("results/bert_attack")
+        output_dir = Path("BERT-Attack/results")
         output_dir.mkdir(parents=True, exist_ok=True)
         output_path = output_dir / f"bert-attack+{safe_model}+{dataset_name}.json"
     output_path = Path(output_path)

@@ -67,7 +67,7 @@ Example commands (from repo root):
 
 ```sh
 # C-STANCE-A (Chinese BERT classifier + MLM)
-uv run BERT-Attck/run_bert_attack.py c-stance-a 
+uv run BERT-Attack/run_bert_attack.py c-stance-a 
 
 # SemEval16 (English BERT classifier + MLM)
 uv run BERT-Attack/run_bert_attack.py sem16
@@ -84,5 +84,5 @@ Key flags:
 - `--use-sim-mat --embed-path --sim-mat-path`: enable cosine-sim filtering with counter-fitted vectors.
 
 Outputs:
-- Raw attack logs: `results/bert_attack/bert-attack+{model}+{dataset}.json`
-- Metrics summary: `results/bert_attack/bert-attack+{model}+{dataset}.summary.json`
+- Raw attack logs: `BERT-Attack/results/bert-attack+{model}+{dataset}.json`
+- Metrics summary: `BERT-Attack/results/bert-attack+{model}+{dataset}.summary.json`
