@@ -17,6 +17,7 @@ from transformers import (
 
 from contentfuzz._types import Stance
 from contentfuzz.cls.encoder import _label_to_stance, to_prompt
+from contentfuzz.evaluate import get_correct_tasks, load_gen_results
 from contentfuzz.stance_dataset import Dataset, load_c_stance, load_sem16, load_vast
 from contentfuzz.utils import SEED
 
@@ -129,6 +130,7 @@ def main(
     tgt_model: str | None,
     mlm_model: str | None,
     output_path: str | None,
+    cls_output_path: str | None = None,
     split: str = "test",
     k: int = 48,
     batch_size: int = 32,
@@ -168,6 +170,20 @@ def main(
         atk_module.DEVICE
     )
     mlm_model_cfg.eval()
+
+    if cls_output_path is not None:
+        gen_results = load_gen_results(cls_output_path)
+        if len(dataset) != len(gen_results):
+            raise ValueError(
+                "Classification results length does not match the dataset size."
+            )
+        correct_tasks, _ = get_correct_tasks(dataset, gen_results)
+        dataset = correct_tasks.to_dict("records")
+        logging.info(
+            "Filtered to %d correctly classified samples from %d.",
+            len(dataset),
+            len(gen_results),
+        )
 
     if sample_n is not None:
         dataset = random.sample(dataset, k=min(sample_n, len(dataset)))
@@ -255,6 +271,11 @@ if __name__ == "__main__":
         help="Where to store attack logs (JSON). Defaults to results/bert_attack/bert-attack+{model}+{dataset}.json",
     )
     parser.add_argument(
+        "--cls-output-path",
+        dest="cls_output_path",
+        help="JSONL file containing classification results; if set, only attack correctly classified samples.",
+    )
+    parser.add_argument(
         "--split", default="test", help="Dataset split to use (default: test)."
     )
     parser.add_argument(
@@ -303,6 +324,7 @@ if __name__ == "__main__":
         tgt_model=args.tgt_model,
         mlm_model=args.mlm_model,
         output_path=args.output,
+        cls_output_path=args.cls_output_path,
         split=args.split,
         k=args.k,
         batch_size=args.batch_size,
